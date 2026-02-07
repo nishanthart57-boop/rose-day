@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rose → Proposal → Promise 🌹</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root{
+      --bg1:#ffe4e6; --bg2:#fbcfe8; --bg3:#f472b6;
+      --card:#ffffff; --text:#2b2b2b; --accent:#e11d48;
+    }
+    body.night{
+      --bg1:#0f172a; --bg2:#111827; --bg3:#020617;
+      --card:#020617; --text:#e5e7eb; --accent:#fb7185;
+    }
+    body{
+      margin:0; min-height:100vh; color:var(--text);
+      background: radial-gradient(circle at top, var(--bg1), var(--bg2), var(--bg3));
+      font-family:'Segoe UI',system-ui; overflow-x:hidden;
+    }
+    .wrap{max-width:380px; margin:auto; padding:16px 10px 40px;}
+    .card{background:rgba(255,255,255,.9); background:color-mix(in srgb, var(--card) 92%, transparent);
+      border-radius:26px; padding:22px; box-shadow:0 30px 70px rgba(0,0,0,.25);
+      animation:pop 1s ease;}
+    @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+
+    header{text-align:center}
+    h1{margin:6px 0;color:var(--accent)}
+    .names{font-weight:700;color:#9d174d}
+
+    .avatars{display:flex; gap:12px; justify-content:center; margin:12px 0}
+    .avatars img{width:120px; border-radius:18px; animation:float 3s ease-in-out infinite}
+    @keyframes float{50%{transform:translateY(-10px)}}
+
+    .controls{display:flex; justify-content:space-between; align-items:center; margin:8px 0}
+    .pill{border:none;border-radius:999px;padding:8px 14px;cursor:pointer}
+    .accent{background:linear-gradient(135deg,#fb7185,#e11d48);color:#fff}
+    .ghost{background:#fce7f3}
+
+    /* FLOW */
+    .flow{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin:10px 0}
+    .step{padding:10px;border-radius:16px;text-align:center;background:#fde7ef;opacity:.5}
+    .step.active{opacity:1; box-shadow:0 10px 20px rgba(225,29,72,.25)}
+
+    /* TYPEWRITER */
+    .letter{min-height:120px; padding:14px; border-radius:18px; background:#fff; background:color-mix(in srgb, var(--card) 94%, transparent)}
+    .cursor{display:inline-block; width:2px; height:1em; background:var(--accent); animation:blink 1s steps(1) infinite}
+    @keyframes blink{50%{opacity:0}}
+
+    /* BUTTONS */
+    .btns{text-align:center; margin:12px 0}
+    .yes{background:linear-gradient(135deg,#fb7185,#e11d48);color:#fff; padding:12px 22px}
+    .no{background:#fce7f3; padding:12px 22px}
+
+    /* PETALS */
+    .petal{position:fixed; top:-10px; font-size:22px; pointer-events:none; animation:fall linear infinite}
+    @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+
+    /* GALLERY */
+    .gallery{margin-top:12px}
+    .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:8px}
+    .grid img{width:100%; border-radius:16px; animation:pop .6s ease}
+
+    audio{display:none}
+  </style>
+</head>
+<body>
+  <!-- NOTE: Place a local MP3 named kadhal-kaditham.mp3 in the same folder -->
+  <audio id="bgm" loop>
+    <source src="kadhal-kaditham.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <h1>Happy Rose Day 🌹</h1>
+        <div class="names">Pattu 💖 Chellam</div>
+      </header>
+
+      <div class="avatars">
+        <img src="Chella_kutty.png.png" alt="Chella Kutty Chusmitha">
+        <img src="Pattu.png.png" alt="Pattu">
+      </div>
+
+      <div class="controls">
+        <button class="pill ghost" onclick="toggleNight()">🌙 Night</button>
+        <button class="pill accent" onclick="startStory()">▶ Start</button>
+      </div>
+
+      <div class="flow">
+        <div class="step active" id="s1">🌹 Rose</div>
+        <div class="step" id="s2">💍 Proposal</div>
+        <div class="step" id="s3">🤝 Promise</div>
+      </div>
+
+      <div class="letter" id="letter"></div>
+
+      <div class="btns">
+        <button class="pill yes" onclick="sayYes()">Yes 🥰</button>
+        <button class="pill no" onmouseover="moveNo(this)">No 🙈</button>
+      </div>
+
+      <div class="gallery">
+        <h3 style="text-align:center;color:var(--accent)">Our Moments 📸</h3>
+        <div class="grid">
+          <img src="Screenshot_20250610_101013_WhatsApp.jpg">
+          <img src="20250408_143707.jpg">
+          <img src="20250328_163204.jpg">
+          <img src="Screenshot_20250527_195831_WhatsApp.jpg">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const text = [
+      "Chella Kutty Chusmitha, ",
+      "this rose is not just a flower… ",
+      "it’s every heartbeat that chose you 🌹\n\n",
+      "From shy smiles to silent support, ",
+      "from today to all our tomorrows…\n",
+      "will you walk this life with me? 💖"
+    ].join('');
+
+    let i=0; let typing;
+    function type(){
+      const el=document.getElementById('letter');
+      if(i<text.length){ el.innerHTML = text.slice(0,i+1)+"<span class='cursor'></span>"; i++; }
+      else clearInterval(typing);
+    }
+
+    function startStory(){
+      document.getElementById('bgm').play();
+      i=0; document.getElementById('letter').innerHTML='';
+      typing=setInterval(type,35);
+      step(1); setTimeout(()=>step(2),2200); setTimeout(()=>step(3),4200);
+    }
+
+    function step(n){
+      ['s1','s2','s3'].forEach((id,idx)=>{
+        document.getElementById(id).classList.toggle('active', idx+1<=n);
+      });
+    }
+
+    function sayYes(){ createPetals(48); }
+
+    function moveNo(btn){ btn.style.position='fixed'; btn.style.left=Math.random()*70+'vw'; btn.style.top=Math.random()*70+'vh'; }
+
+    function createPetals(c){ for(let k=0;k<c;k++){ const p=document.createElement('div'); p.className='petal'; p.textContent='🌹'; p.style.left=Math.random()*100+'vw'; p.style.animationDuration=(Math.random()*3+2)+'s'; document.body.appendChild(p); setTimeout(()=>p.remove(),6000);} }
+
+    function toggleNight(){ document.body.classList.toggle('night'); }
+  </script>
+</body>
+</html>
